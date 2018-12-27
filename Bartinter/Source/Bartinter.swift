@@ -102,12 +102,14 @@ public final class Bartinter: UIViewController {
     @objc public func refreshStatusBarStyle() {
         DispatchQueue.main.async {
             self.calculateStatusBarAreaAvgLuminance { [weak self] avgLuminance in
-                guard let strongSelf = self else { return }
-                let antiFlick = strongSelf.configuration.antiFlickRange / 2
-                if avgLuminance <= strongSelf.configuration.midPoint - antiFlick {
-                    strongSelf.statusBarStyle = .lightContent
-                } else if avgLuminance >= strongSelf.configuration.midPoint + antiFlick {
-                    strongSelf.statusBarStyle = .default
+                DispatchQueue.main.async {
+                    guard let strongSelf = self else { return }
+                    let antiFlick = strongSelf.configuration.antiFlickRange / 2
+                    if avgLuminance <= strongSelf.configuration.midPoint - antiFlick {
+                        strongSelf.statusBarStyle = .lightContent
+                    } else if avgLuminance >= strongSelf.configuration.midPoint + antiFlick {
+                        strongSelf.statusBarStyle = .default
+                    }
                 }
             }
         }
